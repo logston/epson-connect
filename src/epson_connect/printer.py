@@ -3,14 +3,12 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 from .authenticate import AuthCtx
 from .printer_settings import (
-    PrintSettingError,
     merge_with_default_settings,
     validate_settings,
 )
 
 
 class Printer:
-
     VALID_EXTENSIONS = {
         'doc',
         'docx',
@@ -24,6 +22,11 @@ class Printer:
         'gif',
         'png',
         'tiff',
+    }
+
+    VALID_OPERATORS = {
+        'user',
+        'operator',
     }
 
     def __init__(self, auth_ctx: AuthCtx) -> None:
@@ -58,7 +61,7 @@ class Printer:
         # Get extension from file path.
         extension = pathlib.Path(file_path).suffix.lower()
         if extension[1:] not in self.VALID_EXTENSIONS:
-            raise PrintSettingError(f'{extension} is not a valid printing extension.')
+            raise PrinterError(f'{extension} is not a valid printing extension.')
 
         o = urlparse(upload_uri)
         q_dict = parse_qs(o.query)
@@ -102,12 +105,25 @@ class Printer:
         self._execute_print(job_data['id'])
         return job_data['id']
 
-    def cancel_print(self, job_id):
+    def cancel_print(self, job_id, operated_by='user'):
         """
         Cancel print.
         """
         method = 'POST'
         path = f'/api/1/printing/printers/{self.device_id}/jobs/{job_id}/cancel'
+
+        if operated_by not in self.VALID_OPERATORS:
+            raise PrinterError(f'Invalid "operated_by" value {operated_by}')
+
+        job_status = self.job_info(job_id).get('status')
+        if job_status not in ('pending', 'pending_held'):
+            raise PrinterError(f'Can not cancel job with status {job_status}')
+
+        data = {
+            'operated_by': operated_by,
+        }
+
+        self._auth_ctx.send(method, path, data)
 
     def job_info(self, job_id):
         """
@@ -115,6 +131,7 @@ class Printer:
         """
         method = 'GET'
         path = f'/api/1/printing/printers/{self.device_id}/jobs/{job_id}'
+        return self._auth_ctx.send(method, path)
 
     def info(self):
         """
@@ -122,10 +139,22 @@ class Printer:
         """
         method = 'GET'
         path = f'/api/1/printing/printers/{self.device_id}'
+        return self._auth_ctx.send(method, path)
 
-    def notifications(self):
+    def notification(self, callback_uri, enabled=True):
         """
-        Set notifications.
+        Set whether or not to notify of the print job status change.
         """
         method = 'POST'
         path = f'/api/1/printing/printers/{self.device_id}/settings/notifications'
+
+        data = {
+            'notification': enabled,
+            'callback_uri': callback_uri,
+        }
+
+        return self._auth_ctx.send(method, path, data)
+
+
+class PrinterError(ValueError):
+    pass

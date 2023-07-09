@@ -175,5 +175,6 @@ def validate_settings(settings: dict):
     if print_setting['2_sided'] in ('long', 'short') and not collate:
         raise PrintSettingError(f'Must collate when using two-sided printing.')
 
+
 class PrintSettingError(ValueError):
     pass

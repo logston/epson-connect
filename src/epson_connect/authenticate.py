@@ -49,7 +49,10 @@ class AuthCtx:
                 'refresh_token': self._refresh_token,
             }
 
-        body = self.send(method, path, data, headers=headers, auth=auth)
+        try:
+            body = self.send(method, path, data, headers=headers, auth=auth)
+        except ApiError as e:
+            raise AuthenticationError(e)
 
         error = body.get('error')
         if error:
@@ -72,16 +75,16 @@ class AuthCtx:
         self.send(method, path)
 
     def send(self, method, path, data=None, headers=None, auth=None) -> dict:
-        if not headers:
-            headers = {
-                'Authorization': f'Bearer {self._access_token}',
-                'Content-Type': f'application/json',
-            }
+        # auth is only set when we are authenticating with Client ID and Client Secret.
+        # In this scenario, we do not want to call self._auth again as that
+        # would cause a recursion exception.
+        if not auth:
+            self._auth()
 
         resp = requests.request(
                 method=method,
                 url=self._base_url + path,
-                headers=headers,
+                headers=headers or self.default_headers,
                 data=data,
                 auth=auth,
         ).json()
@@ -91,6 +94,13 @@ class AuthCtx:
             raise ApiError(error)
 
         return resp
+
+    @property
+    def default_headers(self):
+        return {
+            'Authorization': f'Bearer {self._access_token}',
+            'Content-Type': f'application/json',
+        }
 
     @property
     def device_id(self):
