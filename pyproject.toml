@@ -2,7 +2,7 @@
 name = "epson-connect"
 version = "0.1.0"
 description = "Bindings for the Espon Connect API"
-license = "BSD-3"
+license = "MIT"
 authors = ["Paul Logston <paul.logston@gmail.com>"]
 maintainers = ["Paul Logston <paul.logston@gmail.com>"]
 readme = "README.md"
@@ -11,7 +11,7 @@ repository = "https://github.com/logston/epson-connect"
 keywords = ["epson", "connect", "api"]
 classifiers = [
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
 ]
