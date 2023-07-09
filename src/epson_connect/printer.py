@@ -2,7 +2,7 @@ import pathlib
 from urllib.parse import parse_qs, urlencode, urlparse
 
 from .authenticate import AuthCtx
-from .print_settings import (
+from .printer_settings import (
     PrintSettingError,
     merge_with_default_settings,
     validate_settings,
@@ -122,7 +122,6 @@ class Printer:
         """
         method = 'GET'
         path = f'/api/1/printing/printers/{self.device_id}'
-
 
     def notifications(self):
         """

@@ -11,21 +11,25 @@ class Scanner:
         Get scan destinations.
         """
         method = 'GET'
+        return self._auth_ctx.send(method, self._path)
 
     def add(self):
         """
         Register scan destination.
         """
         method = 'POST'
+        return self._auth_ctx.send(method, self._path)
 
     def update(self):
         """
         Update scan destination.
         """
         method = 'POST'
+        return self._auth_ctx.send(method, self._path)
 
     def remove(self):
         """
         Update scan destination.
         """
         method = 'DELETE'
+        return self._auth_ctx.send(method, self._path)

@@ -68,7 +68,7 @@ def merge_with_default_settings(settings=None):
     job_name = settings.get('job_name') or ''
     if not job_name:
         # Generate random name if one is not given.
-        job_name = ''.join(random.choice(string.ascii_letters) for _ in range(25))
+        job_name = 'job-' + ''.join(random.choice(string.ascii_letters) for _ in range(8))
 
     settings['job_name'] = job_name
 
@@ -103,7 +103,7 @@ def merge_with_default_settings(settings=None):
 
     # reverse_order
     reverse_order = print_setting.get('reverse_order')
-    if not reverse_order:
+    if reverse_order is None:
         reverse_order = False
 
     if print_setting['2_sided'] in ('long', 'short'):
@@ -116,7 +116,7 @@ def merge_with_default_settings(settings=None):
 
     # collate
     collate = print_setting.get('collate')
-    if not collate:
+    if collate is None:
         collate = True
 
     if print_setting['2_sided'] in ('long', 'short'):
