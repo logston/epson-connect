@@ -1,0 +1,5 @@
+# Add Web page for API and back it by docs in GitHub; people can edit (PDF Is not great).
+# provide a dummy printer email so we can tests our oauth creds
+# change the API key reg form. I shouldn't need a form. It shoudl be a button click.
+# Do not email my client_id and client_secret. That is very insecure.
+# Lots of variation in auth type. Should just be one.
