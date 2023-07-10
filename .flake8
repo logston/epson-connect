@@ -2,5 +2,4 @@
 exclude = __pycache__,.eggs/,.tox/
 max-line-length = 100
 max-complexity = 3
-ignore =
-    W391  # blank line at end of file
+ignore = W391
