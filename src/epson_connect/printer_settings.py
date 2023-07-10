@@ -1,7 +1,6 @@
 import random
 import string
 
-
 VALID_PRINT_MODES = {
     'document',
     'photo',
@@ -80,7 +79,6 @@ def merge_with_default_settings(settings=None):
     if not print_setting:
         return settings
 
-
     collate = print_setting.get('collate')
     settings['print_setting'] = {
         'media_size': print_setting.get('media_size') or 'ms_a4',
@@ -98,7 +96,7 @@ def merge_with_default_settings(settings=None):
     return settings
 
 
-def validate_settings(settings: dict):
+def validate_settings(settings: dict):  # noqa: C901
     """
     Validate all parts of a settings object.
     """
@@ -132,7 +130,7 @@ def validate_settings(settings: dict):
     # borderless
     borderless = print_setting['borderless']
     if not isinstance(borderless, bool):
-        raise PrintSettingError(f'borderless must be a bool')
+        raise PrintSettingError('borderless must be a bool')
 
     # print_quality
     print_quality = print_setting['print_quality']
@@ -157,10 +155,10 @@ def validate_settings(settings: dict):
     # reverse_order
     reverse_order = print_setting['reverse_order']
     if not isinstance(reverse_order, bool):
-        raise PrintSettingError(f'Reverse order must be a bool')
+        raise PrintSettingError('Reverse order must be a bool')
 
     if print_setting['2_sided'] in ('long', 'short') and reverse_order:
-        raise PrintSettingError(f'Can not use reverse order when using two-sided printing.')
+        raise PrintSettingError('Can not use reverse order when using two-sided printing.')
 
     # copies
     copies = print_setting['copies']
@@ -170,10 +168,10 @@ def validate_settings(settings: dict):
     # collate
     collate = print_setting['collate']
     if not isinstance(collate, bool):
-        raise PrintSettingError(f'Collate must be a bool')
+        raise PrintSettingError('Collate must be a bool')
 
     if print_setting['2_sided'] in ('long', 'short') and not collate:
-        raise PrintSettingError(f'Must collate when using two-sided printing.')
+        raise PrintSettingError('Must collate when using two-sided printing.')
 
 
 class PrintSettingError(ValueError):

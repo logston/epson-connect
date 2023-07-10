@@ -45,7 +45,7 @@ class Scanner:
 
         dest_cache = self._destination_cache.get(id_)
         if dest_cache is None:
-            raise ScannerError(f'Scan destination is not yet registered.')
+            raise ScannerError('Scan destination is not yet registered.')
 
         self._validate_destination(name, destination, type_)
 
@@ -76,10 +76,10 @@ class Scanner:
 
     def _validate_destination(self, name, destination, type_):
         if len(name) < 1 or len(name) > 32:
-            raise ScannerError(f'Scan destination name too long.')
+            raise ScannerError('Scan destination name too long.')
 
         if len(destination) < 4 or len(destination) > 544:
-            raise ScannerError(f'Scan destination too long.')
+            raise ScannerError('Scan destination too long.')
 
         if type_ not in self.VALID_DESTINATION_TYPES:
             raise ScannerError(f'Invalid scan destination type {type_}.')

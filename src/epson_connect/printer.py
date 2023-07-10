@@ -2,10 +2,7 @@ import pathlib
 from urllib.parse import parse_qs, urlencode, urlparse
 
 from .authenticate import AuthCtx
-from .printer_settings import (
-    merge_with_default_settings,
-    validate_settings,
-)
+from .printer_settings import merge_with_default_settings, validate_settings
 
 
 class Printer:

@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import os
+from datetime import datetime, timedelta
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -33,7 +33,7 @@ class AuthCtx:
             return
 
         headers = {
-            'Content-Type':'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
         auth = HTTPBasicAuth(self._client_id, self._client_secret)
 
@@ -82,11 +82,11 @@ class AuthCtx:
             self._auth()
 
         resp = requests.request(
-                method=method,
-                url=self._base_url + path,
-                headers=headers or self.default_headers,
-                data=data,
-                auth=auth,
+            method=method,
+            url=self._base_url + path,
+            headers=headers or self.default_headers,
+            data=data,
+            auth=auth,
         ).json()
 
         error = resp.get('code')
@@ -99,7 +99,7 @@ class AuthCtx:
     def default_headers(self):
         return {
             'Authorization': f'Bearer {self._access_token}',
-            'Content-Type': f'application/json',
+            'Content-Type': 'application/json',
         }
 
     @property

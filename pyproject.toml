@@ -28,16 +28,14 @@ packages = [
 python = ">=3.9"
 requests = "^2.31.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 tox = ">=3.16.1"
-flake8 = ">=3.8.3"
+flake8 = ">=6.0.0"
 toml = ">=0.10.1"
-flake8-isort = ">=3.0.0"
+flake8-isort = ">=6.0.0"
 pytest = ">=5.4.0"
 coverage = ">=6.4.2"
 pytest-cov = ">=3.0.0"
-
-[tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.11.1"
 sphinx = "^7.0.1"
 myst-parser = "^2.0.0"
@@ -46,8 +44,15 @@ myst-parser = "^2.0.0"
 addopts = [
     "--import-mode=importlib",
 ]
-
 pythonpath = "src"
+python_files = "tests/test_*.py"
+
+[tool.coverage.paths]
+source = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
 
 [build-system]
 requires = ["poetry-core"]
