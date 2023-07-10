@@ -10,9 +10,14 @@ homepage = "https://pypi.org/project/epson-connect/"
 repository = "https://github.com/logston/epson-connect"
 keywords = ["epson", "connect", "api"]
 classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
+    "Topic :: Internet",
+    "Topic :: Printing",
+    "Topic :: Software Development :: Libraries",
     "Operating System :: OS Independent",
 ]
 packages = [
@@ -34,6 +39,8 @@ pytest-cov = ">=3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.11.1"
+sphinx = "^7.0.1"
+myst-parser = "^2.0.0"
 
 [tool.pytest.ini_options]
 addopts = [
