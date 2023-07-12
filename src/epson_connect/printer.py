@@ -15,6 +15,7 @@ class Printer:
         'pptx',
         'pdf',
         'jpeg',
+        'jpg',
         'bmp',
         'gif',
         'png',
@@ -49,7 +50,7 @@ class Printer:
         method = 'POST'
         path = f'/api/1/printing/printers/{self.device_id}/jobs'
 
-        return self._auth_ctx.send(method, path, settings)
+        return self._auth_ctx.send(method, path, json=settings)
 
     def _upload_file(self, upload_uri: str, file_path: str, print_mode: str) -> None:
         """
@@ -62,8 +63,12 @@ class Printer:
 
         o = urlparse(upload_uri)
         q_dict = parse_qs(o.query)
-        q_dict['File'] = [f'1{extension}']
-        path = o._replace(query=urlencode(q_dict)).geturl()
+        q_dict = {
+            'Key': q_dict['Key'][0],
+            'File': f'1{extension}',
+        }
+        o = o._replace(query=urlencode(q_dict))
+        path = o.path + '?' + o.query
 
         content_type = 'application/octet-stream'
         if print_mode == 'photo':
@@ -120,7 +125,7 @@ class Printer:
             'operated_by': operated_by,
         }
 
-        self._auth_ctx.send(method, path, data)
+        self._auth_ctx.send(method, path, json=data)
 
     def job_info(self, job_id):
         """
@@ -150,7 +155,7 @@ class Printer:
             'callback_uri': callback_uri,
         }
 
-        return self._auth_ctx.send(method, path, data)
+        return self._auth_ctx.send(method, path, json=data)
 
 
 class PrinterError(ValueError):

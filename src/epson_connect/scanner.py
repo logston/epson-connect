@@ -33,7 +33,7 @@ class Scanner:
             'destination': destination,
         }
 
-        resp = self._auth_ctx.send(method, self._path, data)
+        resp = self._auth_ctx.send(method, self._path, json=data)
         self._destination_cache[resp['id']] = resp
         return resp
 
@@ -56,7 +56,7 @@ class Scanner:
             'destination': destination if destination else dest_cache['destination'],
         }
 
-        resp = self._auth_ctx.send(method, self._path, data)
+        resp = self._auth_ctx.send(method, self._path, json=data)
         self._destination_cache[id_] = resp
         return resp
 
@@ -70,7 +70,7 @@ class Scanner:
             'id': id_,
         }
 
-        self._auth_ctx.send(method, self._path, data)
+        self._auth_ctx.send(method, self._path, json=data)
 
         del self._destination_cache[id_]
 

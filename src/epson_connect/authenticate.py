@@ -1,8 +1,11 @@
+import logging
 import os
 from datetime import datetime, timedelta
 
 import requests
 from requests.auth import HTTPBasicAuth
+
+logger = logging.getLogger(__name__)
 
 
 class AuthCtx:
@@ -50,7 +53,7 @@ class AuthCtx:
             }
 
         try:
-            body = self.send(method, path, data, headers=headers, auth=auth)
+            body = self.send(method, path, data=data, headers=headers, auth=auth)
         except ApiError as e:
             raise AuthenticationError(e)
 
@@ -74,20 +77,33 @@ class AuthCtx:
         path = f'/api/1/printing/printers/{self._subject_id}'
         self.send(method, path)
 
-    def send(self, method, path, data=None, headers=None, auth=None) -> dict:
+    def send(self, method, path, data=None, json=None, headers=None, auth=None) -> dict:
         # auth is only set when we are authenticating with Client ID and Client Secret.
         # In this scenario, we do not want to call self._auth again as that
         # would cause a recursion exception.
         if not auth:
             self._auth()
 
+        headers = headers or self.default_headers
+
+        logger.debug(f'{method} {path} data={data} json={json} headers={headers} auth={bool(auth)}')
+
         resp = requests.request(
             method=method,
             url=self._base_url + path,
-            headers=headers or self.default_headers,
+            headers=headers,
             data=data,
+            json=json,
             auth=auth,
-        ).json()
+        )
+
+        # Assume JSON and fall back to raw bytes.
+        try:
+            resp = resp.json()
+        except Exception:
+            resp = {'code': resp.content.decode()}
+
+        logger.debug(f'resp={resp}')
 
         error = resp.get('code')
         if error:
