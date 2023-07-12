@@ -2,7 +2,7 @@
 
 This library provides a wrapper for the Epson Connect API.
 
-NB: This library is very must still in alpha.
+NB: This library is very much still in beta.
 
 ## Install
 
@@ -27,7 +27,11 @@ ec = espon_connect.Client(
 # export ESPON_CONNECT_API_CLIENT_SECRET=<client secret>
 # ec = espon_connect.Client()
 
+# Print a PDF.
 job_id = ec.printer.print('./path/to/file.pdf')
+
+# List scan destinations.
+ec.scanner.list()
 ```
 
 ### Tests
