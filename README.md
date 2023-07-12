@@ -15,17 +15,17 @@ pip install epson-connect
 ```python
 import epson_connect
 
-ec = espon_connect.Client(
+ec = epson_connect.Client(
     printer_email='...',
     client_id='...',
     client_secret='...',
 )
 
 # Or with these enviornment variables defined...
-# export ESPON_CONNECT_API_PRINTER_EMAIL=<an email address for the device>
-# export ESPON_CONNECT_API_CLIENT_ID=<client id>
-# export ESPON_CONNECT_API_CLIENT_SECRET=<client secret>
-# ec = espon_connect.Client()
+# export EPSON_CONNECT_API_PRINTER_EMAIL=<an email address for the device>
+# export EPSON_CONNECT_API_CLIENT_ID=<client id>
+# export EPSON_CONNECT_API_CLIENT_SECRET=<client secret>
+# ec = epson_connect.Client()
 
 # Print a PDF.
 job_id = ec.printer.print('./path/to/file.pdf')

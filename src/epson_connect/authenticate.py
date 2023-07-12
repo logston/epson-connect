@@ -69,7 +69,7 @@ class AuthCtx:
         self._access_token = body['access_token']
         self._subject_id = body['subject_id']
 
-    def _deauthticate(self):
+    def _deauthenticate(self):
         """
         Cancel authentication.
         """
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # For testing.
     AuthCtx(
         base_url='https://api.epsonconnect.com',
-        printer_email=os.environ['ESPON_CONNECT_API_PRINTER_EMAIL'],
-        client_id=os.environ['ESPON_CONNECT_API_CLIENT_ID'],
-        client_secret=os.environ['ESPON_CONNECT_API_CLIENT_SECRET'],
+        printer_email=os.environ['EPSON_CONNECT_API_PRINTER_EMAIL'],
+        client_id=os.environ['EPSON_CONNECT_API_CLIENT_ID'],
+        client_secret=os.environ['EPSON_CONNECT_API_CLIENT_SECRET'],
     )
