@@ -43,16 +43,18 @@ class Printer:
 
         return self._auth_ctx.send(method, path)
 
-    def _print_setting(self, settings) -> dict:
+    def print_setting(self, settings) -> dict:
         """
         Create a print job.
         """
         method = 'POST'
         path = f'/api/1/printing/printers/{self.device_id}/jobs'
 
+        validate_settings(settings)
+
         return self._auth_ctx.send(method, path, json=settings)
 
-    def _upload_file(self, upload_uri: str, file_path: str, print_mode: str) -> None:
+    def upload_file(self, upload_uri: str, file_path: str, print_mode: str) -> None:
         """
         Upload file to be printed.
         """
@@ -85,7 +87,7 @@ class Printer:
         method = 'POST'
         self._auth_ctx.send(method, path, data=data, headers=headers)
 
-    def _execute_print(self, job_id):
+    def execute_print(self, job_id):
         """
         Execute print job.
         """
@@ -100,11 +102,10 @@ class Printer:
         :return: Job ID for print job.
         """
         settings = merge_with_default_settings(settings)
-        validate_settings(settings)
 
-        job_data = self._print_setting(settings)
-        self._upload_file(job_data['upload_uri'], file_path, settings['print_mode'])
-        self._execute_print(job_data['id'])
+        job_data = self.print_setting(settings)
+        self.upload_file(job_data['upload_uri'], file_path, settings['print_mode'])
+        self.execute_print(job_data['id'])
         return job_data['id']
 
     def cancel_print(self, job_id, operated_by='user'):
