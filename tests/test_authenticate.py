@@ -202,3 +202,23 @@ def test_auth_ctx_default_headers(_auth):
         'Authorization': 'Bearer abc123',
         'Content-Type': 'application/json',
     }
+
+
+@mock.patch('epson_connect.authenticate.AuthCtx.send')
+def test_auth_ctx_deauthenticate(send):
+    send.return_value = {
+        'refresh_token': 'rf-123',
+        'expires_in': '3600',
+        'access_token': 'at-5678',
+        'subject_id': 'test_subj_id',
+    }
+
+    auth_ctx = AuthCtx(
+        base_url='https://example.com/my/path',
+        printer_email='example3@print.epsonconnect.com',
+        client_id='ghi',
+        client_secret='789',
+    )
+    auth_ctx._deauthenticate()
+
+    send.assert_called_with('DELETE', '/api/1/printing/printers/test_subj_id')
