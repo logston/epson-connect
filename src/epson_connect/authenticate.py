@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import datetime, timedelta
 
 import requests
@@ -133,13 +132,3 @@ class ApiError(RuntimeError):
     """
     General base error for any API errors after authentication has succeeded.
     """
-
-
-if __name__ == '__main__':
-    # For testing.
-    AuthCtx(
-        base_url='https://api.epsonconnect.com',
-        printer_email=os.environ['EPSON_CONNECT_API_PRINTER_EMAIL'],
-        client_id=os.environ['EPSON_CONNECT_API_CLIENT_ID'],
-        client_secret=os.environ['EPSON_CONNECT_API_CLIENT_SECRET'],
-    )

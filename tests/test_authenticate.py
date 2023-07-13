@@ -1,5 +1,9 @@
-from datetime import datetime
-from epson_connect.authenticate import AuthCtx
+from datetime import datetime, timedelta
+from unittest import mock
+
+import pytest
+
+from epson_connect.authenticate import ApiError, AuthCtx, AuthenticationError
 
 
 def test_auth_ctx(mocker):
@@ -80,5 +84,39 @@ def test_auth_ctx(mocker):
 
     # Expire token.
     auth_ctx._expires_at = datetime.now()
-
     auth_ctx._auth()
+
+    # Set unexpired token.
+    auth_ctx._expires_at = datetime.now() + timedelta(seconds=10)
+
+    with mock.patch('epson_connect.authenticate.AuthCtx.send') as m:
+        m.return_value = {}
+        auth_ctx._auth()
+
+    m.assert_not_called()
+
+
+def test_auth_ctx_api_to_auth_error():
+    with mock.patch('epson_connect.authenticate.AuthCtx.send') as m:
+        m.side_effect = AuthenticationError('test')
+
+        with pytest.raises(AuthenticationError):
+            AuthCtx(
+                base_url='https://example.com/my/path',
+                printer_email='example3@print.epsonconnect.com',
+                client_id='ghi',
+                client_secret='789',
+            )
+
+
+def test_auth_ctx_api_error():
+    with mock.patch('epson_connect.authenticate.AuthCtx.send') as m:
+        m.return_value = {'error': 'test'}
+
+        with pytest.raises(AuthenticationError):
+            AuthCtx(
+                base_url='https://example.com/my/path',
+                printer_email='example3@print.epsonconnect.com',
+                client_id='ghi',
+                client_secret='789',
+            )
