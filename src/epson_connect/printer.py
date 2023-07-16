@@ -149,7 +149,7 @@ class Printer:
         Set whether or not to notify of the print job status change.
         """
         method = 'POST'
-        path = f'/api/1/printing/printers/{self.device_id}/settings/notifications'
+        path = f'/api/1/printing/printers/{self.device_id}/settings/notification'
 
         data = {
             'notification': enabled,
